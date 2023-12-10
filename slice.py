@@ -3,7 +3,7 @@ if __name__ != "__main__":
 
 import soundfile
 import sounddevice
-import util
+from audio_utils import util
 
 args = util.parse_args("Cut a slice of audio.", {
 	"input_file": {

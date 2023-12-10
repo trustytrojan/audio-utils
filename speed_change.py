@@ -3,7 +3,7 @@ if __name__ != "__main__":
 
 import soundfile
 import sounddevice
-import util
+from audio_utils import util
 
 args = util.parse_args("Speed up or slow down your audio.", {
 	"input_file": {
@@ -15,7 +15,7 @@ args = util.parse_args("Speed up or slow down your audio.", {
 		"help": "Audio speed multiplier. If 1, the program exits."
 	},
 
-	"--codec": {
+	("--codec", "-c"): {
 		"help": "The audio codec to encode the output file with",
 		"default": "mp3",
 	},
