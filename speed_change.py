@@ -15,7 +15,7 @@ args = util.parse_args("Speed up or slow down your audio.", {
 		"help": "Audio speed multiplier. If 1, the program exits."
 	},
 
-	("--codec", "-c"): {
+	"--codec": {
 		"help": "The audio codec to encode the output file with",
 		"default": "mp3",
 	},
