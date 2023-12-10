@@ -5,7 +5,7 @@ import soundfile
 import sounddevice
 import util
 
-args = util.parse_args({
+args = util.parse_args("Cut a slice of audio.", {
 	"input_file": {
 		"help": 'A file containing audio ("-" for stdin)'
 	},
@@ -31,7 +31,7 @@ args = util.parse_args({
 		"help": "Play the audio instead of writing to --output_file",
 		"action": "store_true"
 	}
-}, "Cut a slice of audio.")
+})
 
 util.handle_stdin_stdout(args)
 util.handle_no_output_file(args)
@@ -53,4 +53,12 @@ start_time_sec = hms_to_sec(args.start_time)
 end_time_sec = hms_to_sec(args.end_time)
 
 audio, samplerate = soundfile.read(args.input_file)
-util.save_audio(args, audio[start_time_sec * samplerate : end_time_sec * samplerate], samplerate)
+
+# get a slice of the audio from start_time to end_time
+audio = audio[start_time_sec * samplerate : end_time_sec * samplerate]
+
+if args.play:
+	sounddevice.play(audio, samplerate, blocking=True)
+	exit()
+
+util.save_audio(args, audio, samplerate)

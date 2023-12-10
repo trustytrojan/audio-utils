@@ -5,7 +5,7 @@ import soundfile
 import sounddevice
 import util
 
-args = util.parse_args({
+args = util.parse_args("Speed up or slow down your audio.", {
 	"input_file": {
 		"help": "A file containing audio (\"-\" for stdin)"
 	},
@@ -33,7 +33,7 @@ args = util.parse_args({
 		"help": "Skips the resample operation and multiplies the samplerate instead",
 		"action": "store_true"
 	}
-}, "Speed up or slow down your audio.")
+})
 
 if args.multiplier == 1:
 	exit()

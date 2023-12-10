@@ -5,7 +5,7 @@ from soundfile import write
 from typing import Any
 from argparse import ArgumentParser
 
-def parse_args(arguments: dict[str, Any], program_desc: str):
+def parse_args(program_desc: str, arguments: dict[str, Any]):
 	arg_parser = ArgumentParser(description=program_desc)
 	for key, value in arguments.items():
 		arg_parser.add_argument(key, **value)
@@ -37,7 +37,7 @@ def save_audio(args: Namespace, audio, samplerate: int):
 	# save the modified audio (or samplerate)
 	if args.output_file is stdout.buffer:
 		# again soundfile doesn't like raw buffers, we must specify the format
-		# i could make more arguments for this but for now we will force the use of WAV
+		# for now we will force the use of WAV, can be parameterized later
 		write(args.output_file, audio, samplerate, format="WAV", subtype="PCM_32", endian="CPU")
 	else:
 		write(args.output_file, audio, samplerate)
