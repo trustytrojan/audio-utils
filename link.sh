@@ -1,2 +1,3 @@
-AUDIO_UTILS_PATH=/usr/lib/python3.11/site-packages/audio_utils
-sudo ln -sf $PWD $AUDIO_UTILS_PATH
+AUDIO_UTILS=/usr/lib/python3.11/site-packages/audio_utils
+sudo mkdir -p $AUDIO_UTILS
+sudo ln -sf $PWD/*.py $AUDIO_UTILS

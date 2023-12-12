@@ -8,7 +8,7 @@ from argparse import ArgumentParser
 def parse_args(program_desc: str, arguments: dict[str, Any]):
 	arg_parser = ArgumentParser(description=program_desc)
 	for key, value in arguments.items():
-		arg_parser.add_argument(*key, **value)
+		arg_parser.add_argument(key, **value)
 	return arg_parser.parse_args()
 
 def handle_stdin_stdout(args: Namespace):

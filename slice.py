@@ -18,13 +18,13 @@ args = util.parse_args("Cut a slice of audio.", {
 		"help": "End time in seconds, or in hh:mm:ss format"
 	},
 
+	"output_file": {
+		"help": 'Where to save the audio slice ("-" for stdout)'
+	},
+
 	"--codec": {
 		"help": "The audio codec to encode the output file with",
 		"default": "mp3",
-	},
-
-	"--output_file": {
-		"help": 'Where to save the audio slice ("-" for stdout)'
 	},
 
 	"--play": {
@@ -34,28 +34,27 @@ args = util.parse_args("Cut a slice of audio.", {
 })
 
 util.handle_stdin_stdout(args)
-util.handle_no_output_file(args)
-
-def hms_to_sec(time_str: str):
-	time_split = tuple(map(int, time_str.split(":")))
-	match len(time_split):
-		case 3:
-			hours, minutes, seconds = time_split
-			return 3600 * hours + 60 * minutes + seconds
-		case 2:
-			minutes, seconds = time_split
-			return 60 * minutes + seconds
-		case 1:
-			return time_split[0]
-	raise ValueError("time_str not in hh:mm:ss or lesser format")
-
-start_time_sec = hms_to_sec(args.start_time)
-end_time_sec = hms_to_sec(args.end_time)
 
 audio, samplerate = soundfile.read(args.input_file)
 
+def hms_to_sample(time_str: str):
+	time_split = tuple(map(float, time_str.split(":")))
+	match len(time_split):
+		case 3:
+			hours, minutes, seconds = time_split
+			return int((3600 * hours + 60 * minutes + seconds) * samplerate)
+		case 2:
+			minutes, seconds = time_split
+			return int((60 * minutes + seconds) * samplerate)
+		case 1:
+			return int(time_split[0] * samplerate)
+	raise ValueError("time_str not in hh:mm:ss or lesser format")
+
+start_sample = 0 if args.start_time == "-" else hms_to_sample(args.start_time)
+end_sample = (len(audio) - 1) if args.end_time == "-" else hms_to_sample(args.end_time)
+
 # get a slice of the audio from start_time to end_time
-audio = audio[start_time_sec * samplerate : end_time_sec * samplerate]
+audio = audio[start_sample : end_sample]
 
 if args.play:
 	sounddevice.play(audio, samplerate, blocking=True)

@@ -39,7 +39,8 @@ if args.multiplier == 1:
 	exit()
 
 util.handle_stdin_stdout(args)
-util.handle_no_output_file(args)
+input_filename = util.handle_no_output_file(args)
+args.output_file = f"{input_filename}-{args.multiplier}x.{args.codec}"
 audio, samplerate = soundfile.read(args.input_file)
 
 # if playing, simply change the sample rate
