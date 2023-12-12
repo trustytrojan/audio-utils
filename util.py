@@ -2,7 +2,7 @@ from argparse import Namespace
 from tempfile import NamedTemporaryFile
 from sys import stdin, stdout
 from soundfile import write
-from typing import Any
+from typing import IO, Any
 from argparse import ArgumentParser
 
 def parse_args(program_desc: str, arguments: dict[str, Any]):
@@ -33,11 +33,11 @@ def handle_no_output_file(args: Namespace):
 	input_filename = args.input_file[highest_index("/") + 1 : highest_index(".")]
 	args.output_file = f"{input_filename}-{args.multiplier}x.{args.codec}"
 
-def save_audio(args: Namespace, audio, samplerate: int):
+def save_audio(output_file: str | IO, audio, samplerate: int):
 	# save the modified audio (or samplerate)
-	if args.output_file is stdout.buffer:
+	if output_file is stdout.buffer:
 		# again soundfile doesn't like raw buffers, we must specify the format
 		# for now we will force the use of WAV, can be parameterized later
-		write(args.output_file, audio, samplerate, format="WAV", subtype="PCM_32", endian="CPU")
+		write(output_file, audio, samplerate, format="WAV", subtype="PCM_32", endian="CPU")
 	else:
-		write(args.output_file, audio, samplerate)
+		write(output_file, audio, samplerate)

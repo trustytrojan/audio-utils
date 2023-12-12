@@ -58,4 +58,4 @@ else:
 	from numpy import size
 	audio = resample(audio, int(size(audio, axis=0) * (1 / args.multiplier)))
 
-util.save_audio(args, audio, samplerate)
+util.save_audio(args.output_file, audio, samplerate)

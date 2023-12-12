@@ -18,7 +18,7 @@ args = util.parse_args("Cut a slice of audio.", {
 		"help": "End time in seconds, or in hh:mm:ss format"
 	},
 
-	"output_file": {
+	"--save": {
 		"help": 'Where to save the audio slice ("-" for stdout)'
 	},
 
@@ -33,7 +33,9 @@ args = util.parse_args("Cut a slice of audio.", {
 	}
 })
 
+args.output_file = args.save # for compatibility
 util.handle_stdin_stdout(args)
+args.save = args.output_file
 
 audio, samplerate = soundfile.read(args.input_file)
 
@@ -60,4 +62,4 @@ if args.play:
 	sounddevice.play(audio, samplerate, blocking=True)
 	exit()
 
-util.save_audio(args, audio, samplerate)
+util.save_audio(args.save, audio, samplerate)
